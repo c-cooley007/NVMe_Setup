@@ -28,10 +28,40 @@ This project involved partitioning and mounting a new NVMe drive on a Kali Linux
 <p align="center">
 Launch the command line, 'sudo su' and 'lsblk' to display information about block devices: <br/>
 <img src="https://i.imgur.com/LHoqk1d.png" height="80%" width="80%" alt="VNVMe Disk Partitioning and Mounting"/>
+
+ <!-- Key Information:
+NAME: The device name (e.g., /dev/sda, /dev/nvme0n1, /dev/sdb1). Devices without a number are usually the whole disk, while those with a number are partitions.
+MAJ:MIN: The major and minor device numbers. These are used internally by the kernel. You usually won't need to worry about these.
+RM: Whether the device is removable (1) or not (0).
+SIZE: The total size of the device.
+RO: Whether the device is read-only (1) or read-write (0).
+TYPE: The type of block device (e.g., disk, part, rom, loop). disk is a whole disk, part is a partition.
+MOUNTPOINT: The directory where the partition is mounted (if it's mounted). If it's not mounted, this will be blank.
+!-->
+
+
 <br />
 <br />
 We're using the 'parted' utility to interavtively manage the disk /dev/nvme0n1:  <br/>
 <img src="https://i.imgur.com/ewR8v8p.png" height="80%" width="80%" alt="VNVMe Disk Partitioning and Mounting"/>
+
+ <!--
+Interactive Mode:
+When you run parted /dev/nvme0n1, it starts parted in interactive mode.  You'll see a prompt where you can enter commands.  Here are some common parted commands:
+print: Displays the current partition table.
+mklabel <type>: Sets the partition table type (e.g., mklabel gpt, mklabel msdos). Warning: This will erase all existing partitions on the disk.
+mkpart <type> <filesystem type> <start> <end>: Creates a new partition.
+<type>: For GPT, this is a label (e.g., primary, data). For MBR, it's primary or extended.
+<filesystem type>: The type of filesystem you intend to put on the partition (e.g., ext4, xfs, btrfs). This is just a hint; you still have to create the filesystem later with mkfs.
+<start>: The starting point of the partition (e.g., 1MiB, 100GB).
+<end>: The ending point of the partition (e.g., 50%, 200GB).
+rm <number>: Deletes a partition (replace <number> with the partition number).
+resizepart <number> <end>: Resizes a partition.
+move <number> <start>: Moves a partition.
+set <number> <flag> <state>: Sets or unsets a partition flag (e.g., set 1 boot on).
+quit: Exits parted.
+ --!>
+
 <br />
 <br />
 The first partition starts at the 1MiB offset, and both are formatted with the ext4 filesystem.  The drive's partition table is set to GPT.
