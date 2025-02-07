@@ -38,15 +38,14 @@ RO: Whether the device is read-only (1) or read-write (0).
 TYPE: The type of block device (e.g., disk, part, rom, loop). disk is a whole disk, part is a partition.
 MOUNTPOINT: The directory where the partition is mounted (if it's mounted). If it's not mounted, this will be blank.
 !-->
-
-
 <br />
+
+
 <br />
 We're using the 'parted' utility to interavtively manage the disk /dev/nvme0n1:  <br/>
 <img src="https://i.imgur.com/ewR8v8p.png" height="80%" width="80%" alt="VNVMe Disk Partitioning and Mounting"/>
 
- <!--
-Interactive Mode:
+ <!--  Key Information
 When you run parted /dev/nvme0n1, it starts parted in interactive mode.  You'll see a prompt where you can enter commands.  Here are some common parted commands:
 print: Displays the current partition table.
 mklabel <type>: Sets the partition table type (e.g., mklabel gpt, mklabel msdos). Warning: This will erase all existing partitions on the disk.
@@ -61,17 +60,31 @@ move <number> <start>: Moves a partition.
 set <number> <flag> <state>: Sets or unsets a partition flag (e.g., set 1 boot on).
 quit: Exits parted.
  --!>
-
 <br />
+
+
 <br />
 The first partition starts at the 1MiB offset, and both are formatted with the ext4 filesystem.  The drive's partition table is set to GPT.
 Be sure to 'print' to display the current partition table of the drive, a good way to verify: <br/>
 <img src="https://i.imgur.com/Mo6MOW1.png" height="80%" width="80%" alt="VNVMe Disk Partitioning and Mounting"/>
 <br />
+
+
 <br />
 We're going to make the first partition of your NVMe drive accessible within the file system. Remember trust but verify:  <br/>
 <img src="https://i.imgur.com/DUsvoeK.png" height="80%" width="80%" alt="VNVMe Disk Partitioning and Mounting"/>
+
+ <!-- Key Information
+mkfs: This is the general command for making a filesystem.  It's a front-end for various filesystem-specific tools (like mkfs.ext4, mkfs.xfs, etc.)
+
+-t ext4: This option specifies the type of filesystem to create.  ext4 is a very common and robust journaling filesystem used extensively in Linux. It's a good general-purpose choice.
+
+/dev/nvme0n1p1: This is the device and partition that you are formatting.
+
+/dev/nvme0n1: This refers to an NVMe (Non-Volatile Memory Express) drive. NVMe drives are SSDs that use the NVMe protocol, offering much faster speeds than traditional SATA SSDs.
+--!>
 <br />
+
 <br />
 Now we do the second partition:  <br/>
 <img src="https://i.imgur.com/Mwt2p0F.png" height="80%" width="80%" alt="VNVMe Disk Partitioning and Mounting"/>
@@ -80,6 +93,15 @@ Now we do the second partition:  <br/>
 Finally we can verify the partitioning and mounting process you've performed:  <br/>
 <img src="https://i.imgur.com/lVZhqxF.png" height="80%" width="80%" alt="VNVMe Disk Partitioning and Mounting"/>
 <br />
+
+ <!-- Key Information
+ df = diskfree
+Filesystem: The name of the filesystem (usually a device name like /dev/sda1 or a logical volume).  It can also be a special filesystem like tmpfs (for temporary files) or a loop device.
+Size: The total size of the filesystem.
+Used: The amount of space currently used on the filesystem.
+Avail: The amount of space available on the filesystem.
+Use%: The percentage of space used on the filesystem. This is a quick way to see how full a disk is.
+Mounted on: The directory where the filesystem is mounted (the mount point).
 <br />
 </p>
 
